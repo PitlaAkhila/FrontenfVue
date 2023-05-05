@@ -1,26 +1,80 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+
+<!-- step3: must use the component-->
+<NavBar titleName="DESTINATION AMERICA" tagLine="TOP 10 MUST VISIT ATTRACTIONS"/>
+<ContainerBox   :attractions="attractions"/>
+<FeaturedBox :attractions="attractions"/>
+<FooterBox endLine="That's All Folks!"/>
+
+
+  
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
 
-export default {
-  name: 'App',
-  components: {
-    HelloWorld
+//step1: import the component 
+import NavBar from './components/NavBar.vue';
+import ContainerBox from './components/ContainerBox.vue';
+import FeaturedBox from './components/FeaturedBox.vue';
+import FooterBox from './components/FooterBox.vue';
+
+
+  export default{
+  
+    name: 'App',
+    //step2:you must register the component
+    components:{
+      NavBar,
+      ContainerBox,
+      FooterBox,
+      FeaturedBox,
+    },
+    data(){
+      return{
+        attractions:[]
+        
+      }
+    },
+  
+    methods:{
+      async fetchAttractions(){
+         
+          const res = await fetch('https://nodejs-t1.herokuapp.com/api') //I tried to add my name instead of "nodejs-t1" in heroku deployment but it was giving me issues which are a bit complicated
+          //const res = await fetch('http://localhost:5990/api')
+
+          const data = await res.json()
+          console.log( data )
+          return data
+         }
+         
+  
+    },
+  
+     async created(){
+      this.attractions = await this.fetchAttractions()
+      console.log(this.attractions)
+      
+    }
   }
-}
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+ 
+body{
+  margin: 5px;
 }
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+div{
+  margin-bottom: 0.5em;
+  padding:10px;
+}
+
+
 </style>
